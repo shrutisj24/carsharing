@@ -1,0 +1,135 @@
+{% extends 'header2.html'%}
+{% block content %}
+
+<section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('../static/images/bg_3.jpg');"
+  data-stellar-background-ratio="0.5">
+  <div class="overlay"></div>
+  <div class="container">
+    <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
+      <div class="col-md-9 ftco-animate pb-5">
+        <p class="breadcrumbs"><span class="mr-2"><a href="#">Home <i class="ion-ios-arrow-forward"></i></a></span>
+          <span>Contact <i class="ion-ios-arrow-forward"></i></span>
+        </p>
+        <h1 class="mb-3 bread">View requests</h1>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="ftco-section contact-section">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-12 heading-section text-center ftco-animate">
+        <h2 class="mb-2">View requests</h2>
+      </div>
+    </div>
+    <div class="row">
+      <div class="container">
+
+        <table class="table" id="myTable">
+          <thead class="thead-light">
+            <tr>
+              <th scope="col">Details</th>
+              <th scope="col">Ride details</th>
+              <th scope="col">Fare</th>
+              <th scope="col" colspan="2"></th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+    </div>
+</section>
+
+<script>
+
+  $(document).ready(function () {
+    web3 = new Web3(web3.currentProvider);
+    var accountisobtained = "";//accountis
+    web3.eth.getAccounts().then(function (res) {
+      accountisobtained = res[0];
+      $('#acd').html(accountisobtained);
+      var web3dictdata = {
+        gasPrice: web3.utils.stringToHex(gasPriceval),
+        gas: web3.utils.stringToHex(gasval),
+        to: address,
+        from: accountisobtained,
+      }
+      contract.methods.getBookCarRequest(accountisobtained).call().then(function (recordResults) {
+        contract.methods.getRequest(accountisobtained).call().then(function (recordResults1) {
+          // console.log(recordResults1)
+          for (var i = 0; i < recordResults.length; i++) {
+            var str = recordResults[i][1];
+            if (str == "" || recordResults[i][3] != "{{username}}") {
+              continue;
+            }
+            else {
+              var lst = [];
+              for (var j = 0; j < recordResults1.length; j++) {
+                if (str == "" || recordResults1[j][3] != "{{username}}") {
+                  continue;
+                }
+                else {
+                  if (recordResults[i][1] == recordResults1[j][1] && recordResults[i][2] == recordResults1[j][2]) {
+                    lst.push(0);
+                  }
+                  else {
+                    lst.push(1);
+                  }
+                }
+              }
+              // console.log(lst)
+              if (lst.includes(0)) {
+                markup = "<tr class=\"disabled\"><td>" + recordResults[i][2].split('|')[0] + "<br>" + recordResults[i][2].split('|')[1] + "<br>" + recordResults[i][2].split('|')[2] + "</td><td>" + recordResults[i][1].split('|')[4] + " --> " + recordResults[i][1].split('|')[5] + "<br>" + recordResults[i][1].split('|')[6] + "</td><td>" + recordResults[i][1].split('|')[7] + "</td><td><input type=\"submit\" id=\"Accept_" + i + "\" class=\"btn btn-success\" value=\"Accept\" onClick=\"play_action(this.id)\"></td><td><input type=\"submit\" id=\"Reject_" + i + "\" class=\"btn btn-danger\" value=\"Reject\" onClick=\"play_action(this.id)\"></td></tr>";
+              }
+              else {
+                markup = "<tr><td>" + recordResults[i][2].split('|')[0] + "<br>" + recordResults[i][2].split('|')[1] + "<br>" + recordResults[i][2].split('|')[2] + "</td><td>" + recordResults[i][1].split('|')[4] + " --> " + recordResults[i][1].split('|')[5] + "<br>" + recordResults[i][1].split('|')[6] + "</td><td>" + recordResults[i][1].split('|')[7] + "</td><td><input type=\"submit\" id=\"Accept_" + i + "\" class=\"btn btn-success\" value=\"Accept\" onClick=\"play_action(this.id)\"></td><td><input type=\"submit\" id=\"Reject_" + i + "\" class=\"btn btn-danger\" value=\"Reject\" onClick=\"play_action(this.id)\"></td></tr>";
+              }
+              tableBody = $("table tbody");
+              tableBody.append(markup);
+            }
+          }
+
+        });
+
+      })
+      return false;
+    });
+    return false;
+
+  });
+
+</script>
+
+<script type="text/javascript">
+  function play_action(clicked_id) {
+    let text = clicked_id;
+    const myArray = text.split("_");
+
+    var h = myArray[1]
+
+    web3 = new Web3(web3.currentProvider);
+    var accountisobtained = "";//accountis;
+    web3.eth.getAccounts((err, res) => {
+      accountisobtained = res[0];
+      var web3dictdata = {
+        gasPrice: web3.utils.stringToHex(gasPriceval),
+        gas: web3.utils.stringToHex(gasval),
+        to: address,
+        from: accountisobtained,
+      }
+
+      contract.methods.getBookCarRequest(accountisobtained).call().then(function (recordResults) {
+        // alert(recordResults[h])
+        var val = contract.methods.addRequest(accountisobtained, recordResults[h][1], recordResults[h][2], recordResults[h][3], myArray[0]).send(web3dictdata);
+        console.log(val);
+        return val;
+      });
+
+    });
+    return false;
+  }
+</script>
+
+{% endblock %}

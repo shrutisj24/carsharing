@@ -1,0 +1,358 @@
+{% extends 'header1.html'%}
+{% block content %}
+
+<style>
+  .coverclass {
+    opacity: 0.5;
+  }
+</style>
+
+<section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('../static/images/bg_3.jpg');"
+  data-stellar-background-ratio="0.5">
+  <div class="overlay"></div>
+  <div class="container">
+    <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
+      <div class="col-md-9 ftco-animate pb-5">
+        <p class="breadcrumbs"><span class="mr-2"><a href="#">Home <i class="ion-ios-arrow-forward"></i></a></span>
+          <span>Contact <i class="ion-ios-arrow-forward"></i></span>
+        </p>
+        <h1 class="mb-3 bread">Book Ride</h1>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="ftco-section contact-section">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-12 heading-section text-center ftco-animate">
+        <h2 class="mb-2">Book Ride</h2>
+      </div>
+    </div>
+    <div class="input-group mb-3">
+      <input type="text" class="form-control" placeholder="Search any keyword..." id="searchbar">
+    </div>
+    <div class="row">
+      {% for n in range(1,10) %}
+      <div class="col-md-4 mb-4" id="div{{ n }}" style="display: none;">
+        <div class="item">
+          <div class="car-wrap rounded ftco-animate">
+            <div class="img rounded d-flex align-items-end" style="background-image: url(../static/images/car-1.jpg);"
+              id="im{{ n }}">
+            </div>
+            <div class="text">
+              <h2 class="mb-0"><a id="name{{ n }}">person name</a></h2>
+              <div class="d-flex">
+                <span class="cat" id="source{{ n }}" style="color: black;">source</span>
+                <p class="price ml-auto" id="fare{{ n }}"></p>
+              </div>
+              <div class="d-flex mb-3">
+                <span style="color: green;" id="link{{ n }}">Display pickup</span>
+              </div>
+              <p class="d-flex mb-0 d-block">
+                <a class="btn btn-primary py-2 mr-1" id="book{{ n }}">Book now</a>
+                <a class="btn btn-secondary py-2 ml-1" id="detail{{ n }}">Details</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+
+
+      <form id="ninja" action="http://example.com/" method="POST">
+        <input id="donaldduck" type="hidden" name="q" value="a">
+      </form>
+
+      <!-- Button trigger modal -->
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter" id="modelbtn"
+        hidden>
+        Launch demo modal
+      </button>
+
+      <!-- Modal -->
+      <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle">Ride details</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <img id="mdImg" src="../static/images/car-1.jpg" alt="Snow" style="width:100% ;height: 230px">
+              <div class="text">
+                <h2 class="mb-0"><a id="mdName">person name</a></h2>
+                <span class="cat" style="color: black;">Mobile/Email : </span>
+                <span class="cat" id="mdMobEmail" style="color: black;">-/-</span><br>
+                <span class="cat" style="color: black;">Date :</span>
+                <span class="cat" id="mdDate" style="color: black;">-</span>
+                <div class="d-flex">
+                  <span class="cat" id="mdSoDe" style="color: black;">- -> -</span>
+                  <p class="price ml-auto" id="mdFare">-</p>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Button trigger modal -->
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter1"
+        id="modelbtn1" hidden>
+        Launch demo modal
+      </button>
+
+      <!-- Modal -->
+      <div class="modal fade" id="exampleModalCenter1" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle">Enter details</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <input type="text" class="form-control" placeholder="Enter Full name" id="mfname">
+              </div>
+              <div class="form-group">
+                <input type="email" class="form-control" placeholder="Enter email" id="memail">
+              </div>
+              <div class="form-group">
+                <input type="number" class="form-control" placeholder="Enter mobile number" id="mmobile">
+              </div>
+              <input type="text" class="form-control" id="mallinfo" hidden>
+              <input type="text" class="form-control" id="mdrivername" hidden>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="saveButton">Save</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+</section>
+
+<script>
+
+  $(document).ready(function () {
+    web3 = new Web3(web3.currentProvider);
+    var accountisobtained = "";//accountis
+    web3.eth.getAccounts().then(function (res) {
+      accountisobtained = res[0];
+      $('#acd').html(accountisobtained);
+      var web3dictdata = {
+        gasPrice: web3.utils.stringToHex(gasPriceval),
+        gas: web3.utils.stringToHex(gasval),
+        to: address,
+        from: accountisobtained,
+      }
+      contract.methods.getrideDetails(accountisobtained).call().then(function (recordResults) {
+        contract.methods.getRequest(accountisobtained).call().then(function (recordResults1) {
+          console.log(recordResults)
+
+          for (var i = 0; i < recordResults.length; i++) {
+            if (recordResults[i][1] == "") {
+              continue;
+            }
+            else {
+              var uu = i + 1;
+              var gg = uu.toString();
+              var a = "im" + gg;
+              var b = "name" + gg;
+              var c = "div" + gg;
+              var e = "source" + gg;
+              var fare = "fare" + gg;
+              var detail = "detail" + gg;
+              var book = "book" + gg;
+              var link = "link" + gg;
+
+              document.getElementById(a).style.backgroundImage = "url('" + recordResults[i][1] + "')";
+              document.getElementById(b).innerHTML = recordResults[i][2].split('|')[0];
+              document.getElementById(e).innerHTML = recordResults[i][3].split('|')[0] + ' To ' + recordResults[i][3].split('|')[1];
+              document.getElementById(fare).innerHTML = 'Rs. ' + recordResults[i][4].split('|')[1];
+
+              document.getElementById(c).style.display = 'block';
+
+              var infodata = recordResults[i][1] + '|' + recordResults[i][2] + '|' + recordResults[i][3] + '|' + recordResults[i][4]
+              var lst = [];
+              for (var j = 0; j < recordResults1.length; j++) {
+                if (recordResults1[j][1] == infodata && recordResults1[j][4] == 'Accept') {
+                  lst.push(0);
+                }
+                else {
+                  lst.push(1);
+                }
+              }
+
+              var currentTime = new Date();
+              var specifiedTime = new Date(recordResults[i][4].split('|')[0]);
+              specifiedTime.setMinutes(specifiedTime.getMinutes() + 30);
+              var differenceInMilliseconds = specifiedTime.getTime() - currentTime.getTime();
+              var differenceInMinutes = Math.floor(differenceInMilliseconds / (1000 * 60));
+
+              console.log('------------------------------------------');
+              console.log(differenceInMinutes);
+
+              // console.log(lst.every(item => item === 0))
+              // console.log(lst.length >= 3)
+              // console.log(lst)
+              if (lst.filter(item => item === 0).length >= 3 || differenceInMinutes < 0) {
+                var kk = i + 1;
+                var ff = kk.toString();
+                document.getElementById("div" + ff).style.pointerEvents = "none";
+                document.getElementById("div" + ff).classList.add("coverclass");
+
+              }
+
+              $("#" + detail).click(function () {
+                var text = this.id
+                let result = text.slice(6, 7);
+                var h = parseInt(result) - 1
+
+                document.getElementById('mdImg').src = recordResults[h][1];
+                document.getElementById('mdName').innerHTML = recordResults[h][2].split('|')[0];
+                document.getElementById('mdMobEmail').innerHTML = recordResults[h][2].split('|')[1] + '/' + recordResults[h][2].split('|')[2];
+                document.getElementById('mdDate').innerHTML = recordResults[h][4].split('|')[0];
+                document.getElementById('mdSoDe').innerHTML = recordResults[h][3].split('|')[0] + ' To ' + recordResults[h][3].split('|')[1];
+                document.getElementById('mdFare').innerHTML = 'Rs.' + recordResults[h][4].split('|')[1];
+
+                $("#modelbtn").click();
+              });
+
+              $("#" + book).click(function () {
+                var text = this.id
+                let result = text.slice(4, 5);
+                var h = parseInt(result) - 1
+
+                document.getElementById('mfname').value = '';
+                document.getElementById('memail').value = '';
+                document.getElementById('mmobile').value = '';
+                document.getElementById('mallinfo').value = recordResults[h][1] + '|' + recordResults[h][2] + '|' + recordResults[h][3] + '|' + recordResults[h][4]
+                document.getElementById('mdrivername').value = recordResults[h][5]
+
+                $("#modelbtn1").click();
+
+              });
+
+              $("#" + link).click(function () {
+                var text = this.id
+                let result = text.slice(4, 5);
+                var h = parseInt(result) - 1
+
+                // alert(recordResults[h][3].split('|')[0])
+
+                var hdhdjhd = recordResults[h][3].split('|')[0] + '|' + recordResults[h][3].split('|')[1];
+                document.getElementById("ninja").action = "/mapSource";
+                document.getElementById("donaldduck").name = "data";
+                document.getElementById("donaldduck").value = hdhdjhd;
+                document.getElementById("ninja").submit();
+
+              });
+            }
+
+          }
+
+        });
+      })
+      return false;
+    });
+    return false;
+
+  });
+
+  $("#saveButton").click(function () {
+    var fullName = $("#mfname").val().toString();
+    var email = $("#memail").val().toString();
+    var mobileNumber = $("#mmobile").val().toString();
+
+    var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+    if (fullName == "" || email == "" || mobileNumber == "") {
+      alert("Please enter details !")
+    }
+    else if (!filter.test(email)) {
+      alert("Please enter valid email address !");
+    }
+    else if (!mobileNumber.match('[0-9]{10}') || mobileNumber.length != 10) {
+      alert("Please enter valid mobile no !");
+    }
+    else {
+      var allinfo = $("#mallinfo").val().toString();
+      var username = fullName + '|' + email + '|' + mobileNumber + '|' + '{{username}}'
+      var drivername = $("#mdrivername").val().toString();
+
+      var accountisobtained = "";
+      web3.eth.getAccounts().then(function (accounts) {
+        var accountObtained = accounts[0];
+        console.log(accountObtained);
+
+        var web3dictdata = {
+          gasPrice: web3.utils.stringToHex(gasPriceval),
+          gas: web3.utils.stringToHex(gasval),
+          to: address,
+          from: accountObtained,
+        };
+        var val = contract.methods.addBookCarRequest(accountisobtained, allinfo, username, drivername).send(web3dictdata);
+        console.log(val);
+        $("#exampleModalCenter1").modal("hide");
+        return val;
+      })
+        .catch(function (error) {
+          console.error(error);
+        });
+      return false;
+    }
+    return false;
+  });
+</script>
+
+<script>
+  $(document).ready(function () {
+    $("#searchbar").on("keyup", function () {
+      var value = $(this).val().toString();
+      var accountisobtained = "";//accountis
+      web3 = new Web3(web3.currentProvider);
+      var accountisobtained = "";//accountis
+      web3.eth.getAccounts().then(function (res) {
+        accountisobtained = res[0];
+        var web3dictdata = {
+          gasPrice: web3.utils.stringToHex(gasPriceval),
+          gas: web3.utils.stringToHex(gasval),
+          to: address,
+          from: accountisobtained,
+        }
+        contract.methods.getrideDetails(accountisobtained).call().then(function (recordResults) {
+          console.log(recordResults)
+          for (var i = 0; i < recordResults.length; i++) {
+            if (recordResults[i][1] == "") {
+              continue;
+            }
+            else {
+              var uu = i + 1;
+              var gg = uu.toString();
+              var c = "div" + gg;
+              if ((recordResults[i][3].split('|')[0].toLowerCase().includes(value.toLowerCase()) || recordResults[i][3].split('|')[1].toLowerCase().includes(value.toLowerCase())) || value === "") {
+                document.getElementById(c).style.display = 'block';
+                document.getElementById(c).style.visibility = 'visible';
+              }
+              else {
+                document.getElementById(c).style.display = 'none';
+              }
+            }
+          }
+        })
+      })
+    });
+  });
+
+</script>
+
+{% endblock %}

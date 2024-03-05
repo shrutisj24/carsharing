@@ -1,0 +1,253 @@
+pragma experimental ABIEncoderV2;
+
+contract Rideshare {
+    struct userinfo {
+        address key;
+        string username;
+        string email;
+        string password;
+        string mobile;
+        string typeofusers;
+    }
+
+    struct uploadprofile {
+        address key;
+        string identity;
+        string contactinfo;
+        string licenceinfo;
+        string vehicleinfo;
+        string uname;
+        string types;
+    }
+
+    struct rideDetail {
+        address key;
+        string img;
+        string owninfo;
+        string sourcedest;
+        string datefare;
+        string uname;
+    }
+
+    struct bookCar {
+        address key;
+        string allinfo;
+        string username;
+        string drivername;
+    }
+
+    struct request {
+        address key;
+        string allinfo;
+        string username;
+        string drivername;
+        string status;
+    }
+
+    mapping(string => address) userAddresses;
+    mapping(address => userinfo) userinfos;
+    mapping(address => uploadprofile) profiles;
+    mapping(address => rideDetail) rideDetails;
+    mapping(address => bookCar) bookCars;
+    mapping(address => request) requests;
+
+    userinfo[] public allusers;
+    uploadprofile[] public alldocments;
+    rideDetail[] public allrideDetail;
+    bookCar[] public allbookCar;
+    request[] public allrequest;
+
+    event checkRegistry(bool returnValue);
+    event userType(int256 uType);
+    event getRecord(string data);
+    event checkAccess(string access);
+
+    function userRegister(
+        string memory user,
+        string memory username,
+        string memory email,
+        string memory password,
+        string memory mobile,
+        string memory typeofusers
+    ) public {
+        address pAddr = userAddresses[user];
+        userinfo memory userinfo1 = userinfo(
+            msg.sender,
+            username,
+            email,
+            password,
+            mobile,
+            typeofusers
+        );
+        userinfos[pAddr].username = username;
+        userinfos[pAddr].email = email;
+        userinfos[pAddr].password = password;
+        userinfos[pAddr].mobile = mobile;
+        userinfos[pAddr].typeofusers = typeofusers;
+
+        allusers.push(userinfo1);
+    }
+
+    function login(
+        string memory user,
+        string memory uname,
+        string memory password,
+        string memory typeofusers
+    ) public returns (userinfo[] memory) {
+        address pAddr = userAddresses[user];
+        userinfo[] memory result = new userinfo[](allusers.length);
+        uint256 j;
+        for (uint256 i = 0; i < allusers.length; i++) {
+            if (
+                keccak256(abi.encodePacked(string(allusers[i].username))) ==
+                keccak256(abi.encodePacked(uname)) &&
+                keccak256(abi.encodePacked(string(allusers[i].password))) ==
+                keccak256(abi.encodePacked(password)) &&
+                keccak256(abi.encodePacked(string(allusers[i].typeofusers))) ==
+                keccak256(abi.encodePacked(typeofusers))
+            ) {
+                emit getRecord(allusers[i].username);
+                result[j] = allusers[i];
+                j++;
+            }
+        }
+        return result;
+    }
+
+    function upload(
+        string memory user,
+        string memory identity,
+        string memory contactinfo,
+        string memory licenceinfo,
+        string memory vehicleinfo,
+        string memory uname,
+        string memory types
+    ) public {
+        address pAddr = userAddresses[user];
+        uploadprofile memory result1 = uploadprofile(
+            msg.sender,
+            identity,
+            contactinfo,
+            licenceinfo,
+            vehicleinfo,
+            uname,
+            types
+        );
+        profiles[pAddr].identity = identity;
+        profiles[pAddr].contactinfo = contactinfo;
+        profiles[pAddr].licenceinfo = licenceinfo;
+        profiles[pAddr].vehicleinfo = vehicleinfo;
+        profiles[pAddr].uname = uname;
+        profiles[pAddr].types = types;
+
+        alldocments.push(result1);
+    }
+
+    function getuploaddocument(string memory user, string memory types)
+        public
+        returns (uploadprofile[] memory)
+    {
+        address pAddr = userAddresses[user];
+        uploadprofile[] memory result = new uploadprofile[](alldocments.length); // step 2 - create the fixed-length array
+        uint256 j;
+        for (uint256 i = 0; i < alldocments.length; i++) {
+            if (
+                keccak256(abi.encodePacked(string(alldocments[i].types))) ==
+                keccak256(abi.encodePacked(types))
+            ) {
+                emit getRecord(alldocments[i].types);
+                result[j] = alldocments[i];
+                j++;
+            }
+        }
+        return result;
+    }
+
+    function addrideDetail(
+        string memory user,
+        string memory img,
+        string memory owninfo,
+        string memory sourcedest,
+        string memory datefare,
+        string memory uname
+    ) public {
+        address pAddr = userAddresses[user];
+        rideDetail memory result = rideDetail(
+            msg.sender,
+            img,
+            owninfo,
+            sourcedest,
+            datefare,
+            uname
+        );
+        rideDetails[pAddr].img = img;
+        rideDetails[pAddr].owninfo = owninfo;
+        rideDetails[pAddr].sourcedest = sourcedest;
+        rideDetails[pAddr].datefare = datefare;
+        rideDetails[pAddr].uname = uname;
+
+        allrideDetail.push(result);
+    }
+
+    function getrideDetails(string memory user)
+        public
+        returns (rideDetail[] memory)
+    {
+        address pAddr = userAddresses[user];
+        rideDetail[] memory result = new rideDetail[](allrideDetail.length);
+        uint256 j;
+        for (uint256 i = 0; i < allrideDetail.length; i++) {
+            emit getRecord(allrideDetail[i].img);
+            result[j] = allrideDetail[i];
+            j++;
+        }
+        return result;
+    }
+
+    function addBookCarRequest(string memory user,string memory allinfo,string memory username, string memory drivername) public {
+        address pAddr = userAddresses[user];
+        bookCar memory result = bookCar(msg.sender,allinfo,username,drivername);
+
+        bookCars[pAddr].allinfo = allinfo;
+        bookCars[pAddr].username = username;
+        bookCars[pAddr].drivername = drivername;
+
+        allbookCar.push(result);
+    }
+
+    function getBookCarRequest(string memory user)public returns (bookCar[] memory){
+        address pAddr = userAddresses[user];
+        bookCar[] memory result = new bookCar[](allbookCar.length);
+        uint256 j;
+        for (uint256 i = 0; i < allbookCar.length; i++) {
+            emit getRecord(allbookCar[i].allinfo);
+            result[j] = allbookCar[i];
+            j++;
+        }
+        return result;
+    }
+
+    function addRequest(string memory user,string memory allinfo,string memory username, string memory drivername, string memory status) public {
+        address pAddr = userAddresses[user];
+        request memory result = request(msg.sender,allinfo,username,drivername,status);
+
+        requests[pAddr].allinfo = allinfo;
+        requests[pAddr].username = username;
+        requests[pAddr].drivername = drivername;
+        requests[pAddr].status = status;
+
+        allrequest.push(result);
+    }
+
+    function getRequest(string memory user)public returns (request[] memory){
+        address pAddr = userAddresses[user];
+        request[] memory result = new request[](allrequest.length);
+        uint256 j;
+        for (uint256 i = 0; i < allrequest.length; i++) {
+            emit getRecord(allrequest[i].allinfo);
+            result[j] = allrequest[i];
+            j++;
+        }
+        return result;
+    }    
+}

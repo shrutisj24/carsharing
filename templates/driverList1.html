@@ -1,0 +1,123 @@
+{% extends 'header2.html'%}
+{% block content %}
+
+<section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('../static/images/bg_3.jpg');"
+  data-stellar-background-ratio="0.5">
+  <div class="overlay"></div>
+  <div class="container">
+    <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
+      <div class="col-md-9 ftco-animate pb-5">
+        <p class="breadcrumbs"><span class="mr-2"><a href="#">Home <i class="ion-ios-arrow-forward"></i></a></span>
+          <span>Contact <i class="ion-ios-arrow-forward"></i></span>
+        </p>
+        <h1 class="mb-3 bread"> Start ride</h1>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="ftco-section contact-section">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-12 heading-section text-center ftco-animate mb-5">
+
+        <h2 class="mb-2">Own cars</h2>
+      </div>
+    </div>
+    <div class="row">
+
+      <div class="container">
+        <div class="row">
+          {% for n in range(1,10) %}
+
+          <div class="col-md-4 mb-4" data-wow-delay="0.1s" id="div{{ n }}" style="display: none;">
+            <div class="course-item bg-light">
+              <div class="position-relative overflow-hidden">
+                <img class="img-fluid" src="../static/img/course-1.jpg" id="im{{ n }}" alt="">
+
+
+              </div>
+              <div class="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4">
+
+                <a href="#" class="flex-shrink-0 btn btn-sm btn-primary px-3" id="display1{{ n }}"
+                  style="border-radius: 0 50px 50px 0;">Start ride</a>
+              </div>
+              <hr />
+              <div class="text-center p-4 pb-0">
+                <h3 id="name{{ n }}" class="mb-0"></h3>
+
+                <h5 id="mobile{{ n }}" class="mb-4"></h5>
+              </div>
+            </div>
+          </div>
+
+          {% endfor %}
+          <form id="ninja" action="http://example.com/" method="POST">
+            <input id="donaldduck" type="hidden" name="q" value="a">
+          </form>
+
+        </div>
+      </div>
+
+    </div>
+</section>
+
+
+
+<script>
+
+  $(document).ready(function () {
+    web3 = new Web3(web3.currentProvider);
+    var drivername = '{{ username }}';
+    var accountisobtained = "";//accountis
+    web3.eth.getAccounts().then(function (res) {
+      accountisobtained = res[0];
+      $('#acd').html(accountisobtained);
+      var web3dictdata = {
+        gasPrice: web3.utils.stringToHex(gasPriceval),
+        gas: web3.utils.stringToHex(gasval),
+        to: address,
+        from: accountisobtained,
+      }
+      contract.methods.getuploaddocument(accountisobtained, "driverlist").call().then(function (recordResults) {
+        console.log(recordResults)
+        for (var i = 0; i < recordResults.length; i++) {
+          if (recordResults[i][5] == drivername) {
+            var uu = i + 1;
+            var gg = uu.toString();
+            var a = "im" + gg;
+            var b = "name" + gg;
+            var c = "div" + gg;
+            var e = "mobile" + gg;
+            var achor = "display1" + gg;
+
+            document.getElementById(a).src = recordResults[i][1].split('|')[3];
+            document.getElementById(b).innerHTML = recordResults[i][1].split('|')[0];
+            document.getElementById(e).innerHTML = recordResults[i][2].split('|')[3];
+            document.getElementById(e).innerHTML = recordResults[i][2].split('|')[1];
+
+            document.getElementById(c).style.display = 'block';
+
+            $("#" + achor).click(function () {
+              var text = this.id
+              let result = text.slice(8, 9);
+              var h = parseInt(result) - 1
+
+              var allrecord = recordResults[h][1] + "|" + recordResults[h][2] + "|" + recordResults[h][3] + "|" + recordResults[h][4] + "|" + recordResults[h][5]
+              document.getElementById("ninja").action = "/sendDataForRide";
+              document.getElementById("donaldduck").name = "data";
+              document.getElementById("donaldduck").value = allrecord;
+              document.getElementById("ninja").submit();
+
+            });
+          }
+        }
+      })
+      return false;
+    });
+    return false;
+
+  });
+</script>
+
+{% endblock %}

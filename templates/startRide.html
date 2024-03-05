@@ -1,0 +1,163 @@
+{% extends 'header2.html'%}
+{% block content %}
+
+<section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('../static/images/bg_3.jpg');"
+	data-stellar-background-ratio="0.5">
+	<div class="overlay"></div>
+	<div class="container">
+		<div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
+			<div class="col-md-9 ftco-animate pb-5">
+				<p class="breadcrumbs"><span class="mr-2"><a href="/userhome">Home <i
+								class="ion-ios-arrow-forward"></i></a></span>
+					<span>Details <i class="ion-ios-arrow-forward"></i></span>
+				</p>
+				<h1 class="mb-3 bread">Enter ride details</h1>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section class="ftco-section contact-section">
+	<div class="container">
+		<h1 class="mb-3 bread" align="center"> Enter ride details </h1>
+		<!-- <div class="row d-flex mb-5 contact-info"> -->
+
+		<div class="col-md-12 block-9 mb-md-5">
+			<form id="" enctype="multipart/form-data">
+
+				<div class="container">
+					<div class="main-body">
+
+						<div class="row gutters-sm">
+							<div class="col-md-4 mb-3">
+								<div class="card">
+									<div class="card-body">
+										<div class="d-flex flex-column align-items-center text-center">
+											<img src="{{data1[3]}}" alt="Admin" class="rounded-circle" width="150">
+											<div class="mt-3">
+												<h4>{{data1[0]}}</h4>
+												<p class="text-secondary mb-1">{{data1[7]}} </p>
+												<p class="text-muted font-size-sm">{{data1[6]}}</p>
+											</div>
+										</div>
+									</div>
+								</div>
+
+							</div>
+							<div class="col-md-8">
+								<div class="form-group">
+									<label for="inputAddress">Source</label>
+									<input type="text" class="form-control" name="Source" required
+										placeholder="Enter Source" id="source">
+								</div>
+								<div class="form-group">
+									<label for="inputAddress">Destination</label>
+									<input type="text" class="form-control" name="Destination" required
+										placeholder="Enter Destination" id="destination">
+								</div>
+								<div class="form-group">
+									<label for="inputAddress">Date</label>
+									<input type="date" class="form-control" name="date" required
+										placeholder="Selecte date" id="dateofride">
+								</div>
+								<div class="form-group">
+									<label for="inputAddress">Time</label>
+									<input type="time" class="form-control" name="time" required
+										placeholder="Selecte time" id="timeofride">
+								</div>
+								<div class="form-group">
+									<label for="inputAddress">Estimate fare</label>
+									<input type="text" class="form-control" name="fare" required
+										placeholder="Enter estimate fare" id="fareofride">
+								</div>
+								<div class="form-group" align="center">
+									<button type="submit" class="button" id="btnSubmit">Submit</button>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</form>
+
+		</div>
+		<!-- </div> -->
+
+	</div>
+</section>
+
+<script>
+	$('#fareofride').click(function () {
+
+		var source = document.getElementById('source').value;
+		var destination = document.getElementById('destination').value;
+
+		if (source == "" || destination == "") {
+			alert("Please enter Source and Destination for getting fare !")
+			document.getElementById('fareofride').value = '';
+		}
+		else {
+
+			var source1 = $('#source').val().toString();
+			var destination1 = $('#destination').val().toString();
+			var data = { source: source1, destination: destination1 };
+			$.ajax({
+				type: "POST",
+				url: "calculateFare",
+				data: data,
+				success: function (data) {
+					console.log(data);
+					document.getElementById('fareofride').value = data;
+				},
+				error: function (e) {
+					console.log("error :", e);
+					document.getElementById('fareofride').value = 'Something went wrong';
+				}
+			});
+
+			return false;
+		}
+		return false;
+	});
+
+	$('#btnSubmit').click(function () {
+		var source = document.getElementById('source').value;
+		var destination = document.getElementById('destination').value;
+		var dateofride = document.getElementById('dateofride').value;
+		var timeofride = document.getElementById('timeofride').value;
+		var fareofride = document.getElementById('fareofride').value;
+
+		if (source == "" || destination == "" || dateofride == "" || fareofride == "" || timeofride == "") {
+			alert("Please enter details !")
+		}
+		else {
+			console.log($('#timeofride').val().toString())
+			web3 = new Web3(web3.currentProvider);
+			var source1 = $('#source').val().toString();
+			var destination1 = $('#destination').val().toString();
+			var dateofride1 = $('#dateofride').val().toString();
+			var timeofride1 = $('#timeofride').val().toString();
+			var fareofride1 = $('#fareofride').val().toString();
+			var accountisobtained = "";
+			web3.eth.getAccounts().then(function (accounts) {
+				var accountObtained = accounts[0];
+				var web3dictdata = {
+					gasPrice: web3.utils.stringToHex(gasPriceval),
+					gas: web3.utils.stringToHex(gasval),
+					to: address,
+					from: accountObtained,
+				};
+				var val = contract.methods.addrideDetail(accountisobtained, '{{data1[3]}}', '{{data1[0]}}|{{data1[7]}}|{{data1[6]}}', source1 + '|' + destination1, dateofride1+' '+timeofride1 + '|' + fareofride1, '{{uname}}').send(web3dictdata);
+				console.log(val);
+				return val;
+			})
+				.catch(function (error) {
+					console.error(error);
+				});
+			return false;
+		}
+		return false;
+	});
+</script>
+
+{% endblock %}

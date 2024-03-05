@@ -1,0 +1,201 @@
+{% extends 'header2.html'%}
+{% block content %}
+
+
+
+<section class="ftco-section contact-section">
+  <div class="container">
+    <h1 class="mb-3 bread" align="center">CAR REGISTRATION ON CARBOOK</h1>
+    <!-- <div class="row d-flex mb-5 contact-info"> -->
+
+    <div class="col-md-12 block-9 mb-md-5">
+      <form id="fileUploadForm" enctype="multipart/form-data">
+        <div class="alert alert-info" role="alert">
+          Personal Information
+        </div>
+        <div class="form-group">
+          <label for="inputAddress">Fullname</label>
+          <input type="text" class="form-control" name="fullname" required
+            placeholder="firstname + middlename + lastname">
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-4">
+            <label for="inputEmail4">Date of Birth</label>
+            <input type="date" class="form-control" name="dob" placeholder="" required>
+          </div>
+          <div class="form-group col-md-4">
+            <label for="inputPassword4">Gender</label>
+            <select class="form-control" required name="gender" required>
+              <option class="form-control" value="gender" name="gender" required>Select Gender</option>
+              <option class="form-control" value="Male" id="male">Male</option>
+              <option class="form-control" value="Female" id="female">Female</option>
+            </select>
+          </div>
+          <div class="form-group col-md-4">
+            <label for="inputEmail4">upload Photo</label>
+            <input type="file" accept=".png, .jpg, .jpeg" class="form-control wizard-required" id="file" name="file"
+              required data-validation-required-message="Please select file.">
+          </div>
+        </div>
+        <div class="alert alert-info" role="alert">
+          Contact Information
+        </div>
+        <div class="form-group">
+          <label for="inputAddress2">Address </label>
+          <input type="text" class="form-control" name="address" placeholder="Apartment, studio, or floor" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-4">
+            <label for="inputCity">State</label>
+            <input type="text" class="form-control" name="state" required>
+          </div>
+          <div class="form-group col-md-4">
+            <label for="inputState">Email</label>
+            <input type="email" class="form-control" name="email" id="Email" required>
+          </div>
+          <div class="form-group col-md-4">
+            <label for="inputZip">Mobile</label>
+            <input type="text" class="form-control" name="mobile" id="Mobile" required>
+          </div>
+        </div>
+
+        <div class="alert alert-info" role="alert">
+          Driver Liscence Information
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-4">
+            <label for="inputCity">Driver Licence Number</label>
+            <input type="text" class="form-control" name="licence" id="Licence" placeholder="Enter 7 digit Number"
+              required>
+          </div>
+          <div class="form-group col-md-4">
+            <label for="inputState">Date</label>
+            <input type="date" class="form-control" name="date" required>
+          </div>
+          <div class="form-group col-md-4">
+            <label for="inputZip">proof(mortage Document)</label>
+            <input type="file" accept=".png, .jpg, .jpeg" class="form-control wizard-required" id="file1" name="file1"
+              required data-validation-required-message="Please select file.">
+          </div>
+        </div>
+        <div class="alert alert-info" role="alert">
+          Vehicle Information
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-4">
+            <label for="inputCity">Model</label>
+            <input type="text" class="form-control" name="model" required>
+          </div>
+          <div class="form-group col-md-4">
+            <label for="inputState">Year</label>
+            <input type="text" class="form-control" name="year" required>
+          </div>
+          <div class="form-group col-md-4">
+            <label for="inputZip">VIN(Vehicle Identification Number)</label>
+            <input type="text" class="form-control" name="vin" id="VIN" placeholder="Enter 5 digit Number" required>
+          </div>
+        </div>
+        <div class="form-group" align="center">
+
+          <button type="submit" class="button" id="btnSubmit">Submit</button>
+
+
+        </div>
+      </form>
+
+    </div>
+    <!-- </div> -->
+
+  </div>
+</section>
+
+
+<script>
+  $(document).ready(function () {
+
+    $("#btnSubmit").click(function (event) {
+      event.preventDefault();
+      var email = $('#Email').val().toString();
+      var mobile = $('#Mobile').val().toString();
+      var licence = $('#Licence').val().toString();
+
+      var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+
+      if (!filter.test(document.getElementById('Email').value)) {
+        alert("Please enter valid email address !");
+
+      }
+      else if (!$('#Mobile').val().match('[0-9]{10}') || document.getElementById('Mobile').value.length != 10) {
+        alert("Please enter valid mobile no !");
+
+      }
+      else if (!$('#Licence').val().match('[0-9]{7}') || document.getElementById('Licence').value.length != 7) {
+        alert("Please enter 7 digit Licence no !");
+
+      }
+      else if (!$('#VIN').val().match('[0-9]{5}') || document.getElementById('VIN').value.length != 5) {
+        alert("Please enter 5 digit VIN Number !");
+
+      }
+
+      else {
+        var form = $('#fileUploadForm')[0];
+        var data = new FormData(form);
+        console.log(data);
+        // $("#btnSubmit").prop("disabled", true);
+        $.ajax({
+          type: 'POST',
+          enctype: 'multipart/form-data',
+          url: "uploadProfile",
+          data: data,
+          processData: false,
+          contentType: false,
+          cache: false,
+          timeout: 600000,
+          success: function (data) {
+
+            var username = data['e'];
+            console.log(username);
+            var identity = data['a'];
+            var contactinfo = data['b'];
+            var licenceinfo = data['c'];
+            var vehicleinfo = data['d'];
+            var types = data['f'];
+
+
+            web3 = new Web3(web3.currentProvider);
+            var accountisobtained = ""; //accountis;
+            web3.eth.getAccounts().then(function (accounts) {
+              var accountObtained = accounts[0];
+              console.log(accountObtained);
+
+
+              $('#acd').html(accountisobtained);
+              var web3dictdata = {
+                gasPrice: web3.utils.stringToHex(gasPriceval),
+                gas: web3.utils.stringToHex(gasval),
+                to: address,
+                from: accountObtained,
+              }
+              $("#btnSubmit").prop("disabled", false);
+              return contract.methods.upload(accountisobtained, identity, contactinfo, licenceinfo, vehicleinfo, username, types).send(web3dictdata);
+            });
+            return false;
+
+            $("#btnSubmit").prop("disabled", false);
+          },
+          error: function (e) {
+            console.log("ERROR : ", e);
+            $("#btnSubmit").prop("disabled", false);
+          }
+
+
+        });
+      }
+    });
+  });
+</script>
+
+
+
+{% endblock %}

@@ -1,0 +1,117 @@
+{% extends 'header.html'%}
+{% block content %}
+
+<section class="ftco-section contact-section" style="background-image: url('static/images/bg_11.jpg'); background-size: cover; background-repeat: no-repeat; background-attachment: fixed;">
+	<div class="container">
+		<h1 class="mb-3 bread" align="center">CARBOOK LOGIN</h1>
+		<div class="row d-flex mb-5 contact-info">
+
+			<div class="col-md-12 block-9 mb-md-5">
+				<form action="#" class="bg-light p-5 contact-form">
+					<div class="form-group">
+						<input type="text" class="form-control" placeholder="User Name" id="Uname">
+					</div>
+					<div class="form-group">
+						<input type="password" class="form-control" placeholder="Password" id="Password">
+					</div>
+					<div class="form-group">
+						<select id="type" class="form-control">
+							<option value="selected">Choose User Type</option>
+							<option value="User">User</option>
+							<option value="Driver">Driver</option>
+						</select>
+					</div>
+
+					<div class="form-group" align="center">
+						<input type="submit" align="center" value=" Login" class="btn btn-primary py-3 px-5"
+							id="btnuserlogin">
+					</div>
+				</form>
+
+			</div>
+		</div>
+
+	</div>
+</section>
+
+
+<script>
+	$("#btnuserlogin").click(function () {
+		$("#btnuserlogin").prop("disabled", true);
+		web3 = new Web3(web3.currentProvider);
+		var name = $("#Uname").val().toString();
+		var password = $("#Password").val().toString();
+		var typeofuser = $("#type").val().toString();
+
+
+		var accountisobtained = "";
+
+		web3.eth.getAccounts().then(function (accounts) {
+			var accountObtained = accounts[0];
+			console.log(accountObtained);
+
+			var web3dictdata = {
+				gasPrice: web3.utils.stringToHex(gasPriceval),
+				gas: web3.utils.stringToHex(gasval),
+				to: address,
+				from: accountObtained,
+				// other properties...
+			};
+			contract.methods.login(accountisobtained, name, password, typeofuser).call().then(function (recordResults) {
+				console.log(recordResults)
+				if (recordResults[0][1] == "") {
+					console.log(recordResults[0][1]);
+					alert("Invalid username or password");
+					$("#btnuserlogin").prop("disabled", false);
+				}
+				else if (recordResults[0][5] == "User") {
+					console.log(recordResults[0][1]);
+					var name = recordResults[0][1];
+					var data = { name: recordResults[0][1] };
+					console.log(data);
+					$.ajax({
+						type: "POST",
+						url: "userSession",
+						data: data,
+						success: function (data) {
+							console.log(data);
+							window.location.replace("/userhome");
+							$("#btnuserlogin").prop("disabled", false);
+						},
+						error: function (e) {
+							console.log("error :", e);
+							$("#btnuserlogin").prop("disabled", false);
+						}
+					});
+				}
+				else {
+					console.log(recordResults[0][1]);
+					var name = recordResults[0][1];
+					var data = { name: recordResults[0][1] };
+					console.log(data);
+					$.ajax({
+						type: "POST",
+						url: "driverSession",
+						data: data,
+						success: function (data) {
+							console.log(data);
+							window.location.replace("/driverhome");
+							$("#btnuserlogin").prop("disabled", false);
+						},
+						error: function (e) {
+							console.log("error :", e);
+							$("#btnuserlogin").prop("disabled", false);
+						}
+					});
+				}
+			});
+			return false;
+		});
+		return false;
+	})
+</script>
+
+
+
+
+{% endblock %}

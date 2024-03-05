@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Carbook - Free Bootstrap 4 Template by Colorlib</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="../static/css/open-iconic-bootstrap.min.css">
+  <link rel="stylesheet" href="../static/css/animate.css">
+
+  <link rel="stylesheet" href="../static/css/owl.carousel.min.css">
+  <link rel="stylesheet" href="../static/css/owl.theme.default.min.css">
+  <link rel="stylesheet" href="../static/css/magnific-popup.css">
+
+  <link rel="stylesheet" href="../static/css/aos.css">
+
+  <link rel="stylesheet" href="../static/css/ionicons.min.css">
+
+  <link rel="stylesheet" href="../static/css/bootstrap-datepicker.css">
+  <link rel="stylesheet" href="../static/css/jquery.timepicker.css">
+
+
+  <link rel="stylesheet" href="../static/css/flaticon.css">
+  <link rel="stylesheet" href="../static/css/icomoon.css">
+  <link rel="stylesheet" href="../static/css/style1.css">
+
+  <script src="{{url_for('static',filename='new/js/jquery-3.3.1.js')}}"></script>
+  <!-- <script src="{{url_for('static',filename='new/js/jquery-3.3.1.min.js')}}"></script> -->
+  <script src="{{url_for('static',filename='new/blockchain.js')}}"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script> -->
+  <script src="https://cdn.jsdelivr.net/npm/web3js-cdn@1.3.0/web3.min.js"></script>
+  <style>
+    div.gallery {
+      margin: 5px;
+      border: 1px solid #ccc;
+      float: left;
+      width: 260px;
+    }
+
+    div.gallery:hover {
+      border: 1px solid #777;
+    }
+
+    div.gallery img {
+      width: 100%;
+      height: 230px;
+    }
+
+    div.desc {
+      padding: 15px;
+      text-align: center;
+      color: white;
+      height: 90px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+    <div class="container">
+      <a class="navbar-brand" href="/userhome">Car<span>Book</span></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav"
+        aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="oi oi-menu"></span> Menu
+      </button>
+
+      <div class="collapse navbar-collapse" id="ftco-nav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active"><a href="/userhome" class="nav-link">Home</a></li>
+          <li class="nav-item"><a href="/about" class="nav-link">About</a></li>
+          <li class="nav-item"><a href="/#" class="nav-link">Car Details</a></li>
+          <li class="nav-item"><a href="/contact" class="nav-link">Contact</a></li>
+          <li class="nav-item"><a href="/logout" class="nav-link">Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- END nav -->
+
+  <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('../static/images/bg_3.jpg');"
+    data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
+        <div class="col-md-9 ftco-animate pb-5">
+          <p class="breadcrumbs"><span class="mr-2"><a href="#">Home <i class="ion-ios-arrow-forward"></i></a></span>
+            <span>Contact <i class="ion-ios-arrow-forward"></i></span></p>
+          <h1 class="mb-3 bread"> Driver Details</h1>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ftco-section contact-section">
+    <div class="container">
+      
+
+
+      <div class="row justify-content-center">
+        <div class="col-md-12 heading-section text-center ftco-animate mb-5">
+          
+          <h2 class="mb-2">Featured Vehicles</h2>
+        </div>
+      </div>
+      <div class="row">
+        <!-- <div class="col-md-12">
+            <div class="row">
+                {% for n in range(1,10) %}
+                    <div class="col-md-4 mb-4" data-wow-delay="0.1s" id="div{{ n }}">
+                        <div class="item">
+                            <div class="car-wrap rounded ftco-animate" >
+                                <img class="img rounded d-flex align-items-end" id="im{{ n }}" src="image_path_here"></img>
+                                <div class="text">
+                                    <h2 class="mb-0"><a href="#"  id="name{{ n }}" >Mercedes Grand Sedan</a></h2>
+                                    <div class="d-flex mb-3">
+                                        <span class="cat"  id="mobile{{ n }}">Cheverolet</span>
+                                       
+                                    </div>
+                                    <p class="d-flex mb-0 d-block">
+                                        <a href="#" class="btn btn-primary py-2 mr-1" id="display1{{ n }}" >SHOW</a>
+                                       
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+           
+        </div> -->
+     
+     
+     
+      <div class="container">
+        <div class="row">
+          {% for n in range(1,10) %}
+
+          <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s" id="div{{ n }}" style="display: none;">
+            <div class="course-item bg-light">
+              <div class="position-relative overflow-hidden">
+                <img class="img-fluid" src="../static/img/course-1.jpg" id="im{{ n }}" alt="">
+
+
+              </div>
+              <div class="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4">
+
+                <a href="#" class="flex-shrink-0 btn btn-sm btn-primary px-3" id="display1{{ n }}"
+                  style="border-radius: 0 50px 50px 0;">show details</a>
+              </div>
+              <hr />
+              <div class="text-center p-4 pb-0">
+                <h3 id="name{{ n }}" class="mb-0"></h3>
+
+                <h5 id="mobile{{ n }}" class="mb-4"></h5>
+              </div>
+              <div class="d-flex border-top">
+                <small class="flex-fill text-center border-end py-2"><i class="fa fa-user-tie text-primary me-2"
+                    id="email{{ n }}"></i></small>
+                <small class="flex-fill text-center border-end py-2"><i class="fa fa-clock text-primary me-2"
+                    id="addr{{ n }}"></i></small>
+
+              </div>
+            </div>
+          </div>
+
+          {% endfor %}
+          <form id="ninja" action="http://example.com/" method="POST">
+            <input id="donaldduck" type="hidden" name="q" value="a">
+          </form>
+
+        </div>
+      </div>
+
+
+
+      
+
+    </div>
+  </section>
+
+
+
+
+
+
+  <!-- loader -->
+  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px">
+      <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
+      <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10"
+        stroke="#F96D00" />
+    </svg></div>
+
+
+  <script src="../static/js/jquery-migrate-3.0.1.min.js"></script>
+  <script src="../static/js/popper.min.js"></script>
+  <script src="../static/js/bootstrap.min.js"></script>
+  <script src="../static/js/jquery.easing.1.3.js"></script>
+  <script src="../static/js/jquery.waypoints.min.js"></script>
+  <script src="../static/js/jquery.stellar.min.js"></script>
+  <script src="../static/js/owl.carousel.min.js"></script>
+  <script src="../static/js/jquery.magnific-popup.min.js"></script>
+  <script src="../static/js/aos.js"></script>
+  <script src="../static/js/jquery.animateNumber.min.js"></script>
+  <script src="../static/js/bootstrap-datepicker.js"></script>
+  <script src="../static/js/jquery.timepicker.min.js"></script>
+  <script src="../static/js/scrollax.min.js"></script>
+
+  <script src="../static/js/google-map.js"></script>
+  <script src="../static/js/main.js"></script>
+
+  <script>
+
+    $(document).ready(function () {
+      web3 = new Web3(web3.currentProvider);
+      var uploader = '{{ user }}';
+      var accountisobtained = "";//accountis
+      web3.eth.getAccounts().then(function (res) {
+        accountisobtained = res[0];
+        $('#acd').html(accountisobtained);
+        var web3dictdata = {
+          gasPrice: web3.utils.stringToHex(gasPriceval),
+          gas: web3.utils.stringToHex(gasval),
+          to: address,
+          from: accountisobtained,
+        }
+        contract.methods.getuploaddocument(accountisobtained, "driverlist").call().then(function (recordResults) {
+          console.log(recordResults)
+
+          for (var i = 0; i < recordResults.length; i++) {
+            if (recordResults[i][1] == "") {
+            }
+            else {
+              console.log(recordResults[i][1]);
+              var uu = i + 1;
+              var gg = uu.toString();
+              var a = "im" + gg;
+              var b = "name" + gg;
+              var c = "div" + gg;
+              var d = "email" + gg;
+              var e = "mobile" + gg;
+              <!-- var f = "gender" + gg; -->
+              var f = "addr" + gg;
+              var achor = "display1" + gg;
+
+              document.getElementById(a).src = recordResults[i][1].split('|')[3];
+              document.getElementById(b).innerHTML = recordResults[i][1].split('|')[0];
+              document.getElementById(d).innerHTML = recordResults[i][2].split('|')[2];
+              document.getElementById(e).innerHTML = recordResults[i][2].split('|')[3];
+              console.log(recordResults[i][2].split('|')[3])
+              document.getElementById(e).innerHTML = recordResults[i][2].split('|')[1];
+
+              document.getElementById(c).style.display = 'block';
+
+              $("#" + achor).click(function () {
+                var text = this.id
+                let result = text.slice(8, 9);
+                console.log(result);
+                var h = parseInt(result) - 1
+
+
+                var allrecord = recordResults[h][1] + "|" + recordResults[h][2] + "|" + recordResults[h][3] + "|" + recordResults[h][4] + "|" + recordResults[h][5]
+                document.getElementById("ninja").action = "/displayDriver";
+                document.getElementById("donaldduck").name = "data";
+                document.getElementById("donaldduck").value = allrecord;
+                document.getElementById("ninja").submit();
+
+
+
+
+              });
+            }
+
+          }
+        })
+        return false;
+      });
+      return false;
+
+    });
+  </script>
+
+
+
+</body>
+
+</html>

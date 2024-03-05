@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Map with Marker and Place Name</title>
+    <style>
+        /* Set the size of the map container */
+        #map {
+            height: 100vh;
+            width: 100%;
+        }
+    </style>
+    <script src="{{url_for('static',filename='new/js/jquery-3.3.1.js')}}"></script>
+</head>
+
+<body>
+
+    <!-- Create a div to hold the map -->
+    <div id="map"></div>
+
+    <script>
+        // Function to initialize the map
+        function initMap() {
+            // Replace 'YOUR_API_KEY' with your actual Google Maps API key
+            var apiKey = 'AIzaSyDwaXa3JZsFqv71812tm1k5FokRzLrX0RM';
+
+            // Replace 'Your Place Name' with the actual name of the place
+            var placeName = '{{source}}';
+
+            $.ajax({
+                url: 'https://nominatim.openstreetmap.org/search',
+                method: 'GET',
+                dataType: 'json',
+                data: {
+                    format: 'json',
+                    q: placeName,
+                },
+                success: function (response) {
+                    if (response.length > 0) {
+                        var latitude = parseFloat(response[0].lat);
+                        var longitude = parseFloat(response[0].lon);
+
+                        var location = { lat: latitude, lng: longitude };
+
+                        // Create a new map centered at the specified location
+                        var map = new google.maps.Map(document.getElementById('map'), {
+                            center: location,
+                            zoom: 15
+                        });
+
+                        // Create a marker at the specified location with the place name as the title
+                        var marker = new google.maps.Marker({
+                            position: location,
+                            map: map,
+                            title: placeName,
+                            icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png' // Set marker color
+                        });
+
+                    } else {
+                        console.error('Geocoding failed. No results found.');
+                    }
+                },
+                error: function (error) {
+                    console.error('Error in geocoding request:', error);
+                },
+            });
+        }
+    </script>
+
+    <!-- Include the Google Maps API script with your API key -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwaXa3JZsFqv71812tm1k5FokRzLrX0RM&callback=initMap"
+        async defer></script>
+
+</body>
+
+</html>
